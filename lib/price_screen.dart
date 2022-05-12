@@ -20,6 +20,17 @@ class _PriceScreenState extends State<PriceScreen> {
   List<String> exchangeRate = ['?', '?', '?'];
   String currencySelected =
       currenciesList[currenciesList.length - 2]; //To display USD as default
+
+  @override
+  void initState() {
+    super.initState();
+    asyncInitState();
+  }
+
+  void asyncInitState() async {
+    await getCryptoCurrencyExchangeRate();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,7 +141,7 @@ class _PriceScreenState extends State<PriceScreen> {
         final url = Uri.parse(
             'https://rest.coinapi.io/v1/exchangerate/$cryto/$currencySelected');
 
-        final response = await http.get(
+        final response = await client.get(
           url,
           headers: {'X-CoinAPI-Key': apiKey},
         );
